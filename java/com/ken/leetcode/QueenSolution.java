@@ -13,7 +13,7 @@ public class QueenSolution {
     private ArrayList<int[]> attack = new ArrayList();
     private ArrayList<char[]> queen = new ArrayList();
 
-    public List<ArrayList<char[]>> solveNQueens(int n) {
+    public ArrayList<ArrayList<char[]>> solveNQueens(int n) {
 
         ArrayList<ArrayList<char[]>> solution = new ArrayList<>();
 
@@ -29,10 +29,12 @@ public class QueenSolution {
             queen.add(queenOne);
         }
 
-        //for (int i = 0; i < n; i ++) {
-            //System.out.println("solve i " + i);
-            backtrack(0, n, queen, attack, solution);
-        //}
+        backtrack(0, n, queen, attack, solution);
+
+        for (ArrayList<char[]> arrayList : solution) {
+            //debugArrays(null, arrayList);
+            System.out.println("\n");
+        }
 
         return solution;
     }
@@ -56,7 +58,19 @@ public class QueenSolution {
     private void backtrack(int k, int n, ArrayList<char[]> queen,
                 ArrayList<int[]> attack, ArrayList<ArrayList<char[]>> solution) {
         if (k == n) {
-            solution.add(queen);
+            ArrayList<char[]> tmp = new ArrayList<char[]>();
+            for (int m = 0; m < n; m++) {
+                char[] tmpOne = new char[n];
+                tmp.add(tmpOne);
+            }
+            copyMyList2(tmp, queen);
+            solution.add(tmp);
+            /*
+            for (ArrayList<char[]> arrayList : solution) {
+                debugArrays(null, arrayList);
+                System.out.println("\n");
+            }
+            */
             return;
         }
 
@@ -71,6 +85,7 @@ public class QueenSolution {
                 //debugArrays(tmp, queen);
                 queen.get(k)[i] = 'Q';
                 putQueen(k, i, attack);
+                //debugArrays(null, queen);
                 backtrack(k+1, n, queen, attack, solution);
                 copyMyList(attack, tmp);
                 queen.get(k)[i] = '.';
@@ -80,15 +95,20 @@ public class QueenSolution {
     }
 
     private void debugArrays(ArrayList<int[]> arrays, ArrayList<char[]> queen) {
-        System.out.println("attack");
 
-        for (int[] item : arrays) {
-            System.out.println(Arrays.toString(item));
+        if (arrays != null) {
+            System.out.println("attack");
+
+            for (int[] item : arrays) {
+                System.out.println(Arrays.toString(item));
+            }
         }
 
-        System.out.println("queen");
-        for (char[] item : queen) {
-            System.out.println(Arrays.toString(item));
+        if (queen != null) {
+            System.out.println("queen");
+            for (char[] item : queen) {
+                System.out.println(Arrays.toString(item));
+            }
         }
     }
 
@@ -102,15 +122,27 @@ public class QueenSolution {
         }
     }
 
+    private void copyMyList2(ArrayList<char[]> des, ArrayList<char[]> src) {
+        int n = des.size();
+
+        for (int i = 0; i < n; i++) {
+            char[] d = des.get(i);
+            char[] s = src.get(i);
+            System.arraycopy(s, 0, d, 0, s.length);
+        }
+    }
+
     public static void main(String[] args) {
-        List<ArrayList<char[]>> solution = new QueenSolution().solveNQueens(8);
+        ArrayList<ArrayList<char[]>> solution = new QueenSolution().solveNQueens(8);
         System.out.println("solution " + solution.size());
+        
         for (ArrayList<char[]> arrayList : solution) {
             for (char[] item : arrayList) {
                 System.out.println(Arrays.toString(item));
             }
             System.out.println("\n");
         }
+            
     }
     
 }
